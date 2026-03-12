@@ -1,0 +1,4 @@
+name: mc_server_endpoints_plugin
+version: '1.0-SNAPSHOT'
+main: io.github.celinova.mc_server_endpoints_plugin.Mc_server_endpoints_plugin
+api-version: '1.21'
