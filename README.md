@@ -1,6 +1,8 @@
 # Pancake
 
-A low level-ish monitoring endpoint paper plugin for Minecraft paper servers.
+A low level-ish monitoring endpoint paper plugin for Minecraft paper servers. This plugin periodically polls a snapshot of in-game data for endpoints to pull from on request.
+
+This plugin currently features support for both plaintext and json formats.
 
 ### Foreword
 This was a bit of a pain to make, because there isn't much documentation and it's kinda tricky to map application layer concepts like HTTP onto Java with little documentation.
