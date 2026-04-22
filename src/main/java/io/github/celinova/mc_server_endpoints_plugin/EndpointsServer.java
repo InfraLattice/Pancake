@@ -12,14 +12,17 @@ public class EndpointsServer {
 
     private String buildStatusJson(MetricsSnapshot snapshot) {
         return String.format(
-                "{\"onlinePlayers\": %d, \"maxPlayers\": %d, \"uptimeSeconds\": %d, \"startTimeMillis\": %d, \"minecraftVersion\": \"%s\", \"serverVersion\": \"%s\", \"lastUpdatedEpoch\": %d}",
+                "{\"onlinePlayers\": %d, \"maxPlayers\": %d, \"uptimeSeconds\": %d, \"startTimeMillis\": %d, \"minecraftVersion\": \"%s\", \"serverVersion\": \"%s\", \"lastUpdatedEpoch\": %d, \"Tps1m\": %.2f, \"Tps5m\": %.2f, \"Tps15m\": %.2f}",
                 snapshot.getOnlinePlayers(),
                 snapshot.getMaxPlayers(),
                 snapshot.getUptimeSeconds(),
                 snapshot.getStartTimeMillis(),
                 snapshot.getMinecraftVersion(),
                 snapshot.getServerVersion(),
-                snapshot.getLastUpdatedEpoch()
+                snapshot.getLastUpdatedEpoch(),
+                snapshot.getTps1m(),
+                snapshot.getTps5m(),
+                snapshot.getTps15m()
         );
     }
 
@@ -134,6 +137,34 @@ public class EndpointsServer {
                 sb.append("# HELP mc_entities_end Current number of loaded entities in the end\n");
                 sb.append("# TYPE mc_entities_end gauge\n");
                 sb.append("mc_entities_end ").append(snapshot.getEntitiesEnd()).append("\n");
+
+                sb.append("# HELP mc_loaded_chunks_total Current total number of loaded chunks across all worlds\n");
+                sb.append("# TYPE mc_loaded_chunks_total gauge\n");
+                sb.append("mc_loaded_chunks_total ").append(snapshot.getLoadedChunksTotal()).append("\n");
+
+                sb.append("# HELP mc_loaded_chunks_overworld Current number of loaded chunks in the overworld\n");
+                sb.append("# TYPE mc_loaded_chunks_overworld gauge\n");
+                sb.append("mc_loaded_chunks_overworld ").append(snapshot.getLoadedChunksOverworld()).append("\n");
+
+                sb.append("# HELP mc_loaded_chunks_nether Current number of loaded chunks in the nether\n");
+                sb.append("# TYPE mc_loaded_chunks_nether gauge\n");
+                sb.append("mc_loaded_chunks_nether ").append(snapshot.getLoadedChunksNether()).append("\n");
+
+                sb.append("# HELP mc_loaded_chunks_end Current number of loaded chunks in the end\n");
+                sb.append("# TYPE mc_loaded_chunks_end gauge\n");
+                sb.append("mc_loaded_chunks_end ").append(snapshot.getLoadedChunksEnd()).append("\n");
+
+                sb.append("# HELP mc_tps_1m 1-minute average ticks per second\n");
+                sb.append("# TYPE mc_tps_1m gauge\n");
+                sb.append("mc_tps_1m ").append(snapshot.getTps1m()).append("\n");
+
+                sb.append("# HELP mc_tps_5m 5-minute average ticks per second\n");
+                sb.append("# TYPE mc_tps_5m gauge\n");
+                sb.append("mc_tps_5m ").append(snapshot.getTps5m()).append("\n");
+
+                sb.append("# HELP mc_tps_15m 15-minute average ticks per second\n");
+                sb.append("# TYPE mc_tps_15m gauge\n");
+                sb.append("mc_tps_15m ").append(snapshot.getTps15m()).append("\n");
 
                 String response = sb.toString();
                 sendPlainText(exchange, 200, response);

@@ -43,6 +43,10 @@ public class Mc_server_endpoints_plugin extends JavaPlugin implements Listener {
     int entitiesOverworld = 0;
     int entitiesNether = 0;
     int entitiesEnd = 0;
+    int loadedChunksTotal = 0;
+    int loadedChunksOverworld = 0;
+    int loadedChunksNether = 0;
+    int loadedChunksEnd = 0;
 
     long uptimeSeconds = ManagementFactory.getRuntimeMXBean().getUptime() / 1000;
     long startTimeMillis = ManagementFactory.getRuntimeMXBean().getStartTime();
@@ -64,6 +68,24 @@ public class Mc_server_endpoints_plugin extends JavaPlugin implements Listener {
       }
     }
 
+    for (World world : Bukkit.getWorlds()) {
+      int count = world.getLoadedChunks().length;
+
+      loadedChunksTotal += count;
+
+      switch (world.getEnvironment()) {
+        case NORMAL -> loadedChunksOverworld += count;
+        case NETHER -> loadedChunksNether += count;
+        case THE_END -> loadedChunksEnd += count;
+      }
+    }
+
+    double[] tps = Bukkit.getServer().getTPS();
+
+    double tps1m = tps[0];
+    double tps5m = tps[1];
+    double tps15m = tps[2];
+
     currentSnapshot = new MetricsSnapshot(
             onlinePlayers,
             maxPlayers,
@@ -75,7 +97,14 @@ public class Mc_server_endpoints_plugin extends JavaPlugin implements Listener {
             entitiesTotal,
             entitiesOverworld,
             entitiesNether,
-            entitiesEnd
+            entitiesEnd,
+            loadedChunksTotal,
+            loadedChunksOverworld,
+            loadedChunksNether,
+            loadedChunksEnd,
+            tps1m,
+            tps5m,
+            tps15m
     );
 
 
