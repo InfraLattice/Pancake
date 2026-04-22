@@ -119,6 +119,22 @@ public class EndpointsServer {
                 sb.append("# TYPE mc_snapshot_last_updated_epoch gauge\n");
                 sb.append("mc_snapshot_last_updated_epoch ").append(snapshot.getLastUpdatedEpoch()).append("\n");
 
+                sb.append("# HELP mc_entities_total Current total number of loaded entities across all worlds\n");
+                sb.append("# TYPE mc_entities_total gauge\n");
+                sb.append("mc_entities_total ").append(snapshot.getEntitiesTotal()).append("\n");
+
+                sb.append("# HELP mc_entities_overworld Current number of loaded entities in the overworld\n");
+                sb.append("# TYPE mc_entities_overworld gauge\n");
+                sb.append("mc_entities_overworld ").append(snapshot.getEntitiesOverworld()).append("\n");
+
+                sb.append("# HELP mc_entities_nether Current number of loaded entities in the nether\n");
+                sb.append("# TYPE mc_entities_nether gauge\n");
+                sb.append("mc_entities_nether ").append(snapshot.getEntitiesNether()).append("\n");
+
+                sb.append("# HELP mc_entities_end Current number of loaded entities in the end\n");
+                sb.append("# TYPE mc_entities_end gauge\n");
+                sb.append("mc_entities_end ").append(snapshot.getEntitiesEnd()).append("\n");
+
                 String response = sb.toString();
                 sendPlainText(exchange, 200, response);
 

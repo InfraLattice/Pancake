@@ -3,6 +3,10 @@ package io.github.celinova.mc_server_endpoints_plugin;
 public class MetricsSnapshot {
     private final int onlinePlayers;
     private final int maxPlayers;
+    private final int entitiesTotal;
+    private final int entitiesOverworld;
+    private final int entitiesNether;
+    private final int entitiesEnd;
     private final long uptimeSeconds;
     private final long startTimeMillis;
     private final String minecraftVersion;
@@ -16,7 +20,11 @@ public class MetricsSnapshot {
             long startTimeMillis,
             String minecraftVersion,
             String serverVersion,
-            long lastUpdatedEpoch
+            long lastUpdatedEpoch,
+            int entitiesTotal,
+            int entitiesOverworld,
+            int entitiesNether,
+            int entitiesEnd
     ) {
         this.onlinePlayers = onlinePlayers;
         this.maxPlayers = maxPlayers;
@@ -25,6 +33,10 @@ public class MetricsSnapshot {
         this.minecraftVersion = minecraftVersion;
         this.serverVersion = serverVersion;
         this.lastUpdatedEpoch = lastUpdatedEpoch;
+        this.entitiesTotal = entitiesTotal;
+        this.entitiesOverworld = entitiesOverworld;
+        this.entitiesNether = entitiesNether;
+        this.entitiesEnd = entitiesEnd;
     }
 
 
@@ -54,5 +66,21 @@ public class MetricsSnapshot {
 
     public long getLastUpdatedEpoch() {
         return lastUpdatedEpoch;
+    }
+
+    public int getEntitiesTotal() {
+        return entitiesTotal;
+    }
+
+    public int getEntitiesOverworld() {
+        return entitiesOverworld;
+    }
+
+    public int getEntitiesNether() {
+        return entitiesNether;
+    }
+
+    public int getEntitiesEnd() {
+        return entitiesEnd;
     }
 }

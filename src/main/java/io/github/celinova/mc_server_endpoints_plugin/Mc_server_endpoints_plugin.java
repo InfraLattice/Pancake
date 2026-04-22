@@ -1,6 +1,7 @@
 package io.github.celinova.mc_server_endpoints_plugin;
 
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.management.ManagementFactory;
@@ -38,6 +39,10 @@ public class Mc_server_endpoints_plugin extends JavaPlugin implements Listener {
   private void refreshSnapshot() {
     int onlinePlayers = Bukkit.getOnlinePlayers().size();
     int maxPlayers = Bukkit.getMaxPlayers();
+    int entitiesTotal = 0;
+    int entitiesOverworld = 0;
+    int entitiesNether = 0;
+    int entitiesEnd = 0;
 
     long uptimeSeconds = ManagementFactory.getRuntimeMXBean().getUptime() / 1000;
     long startTimeMillis = ManagementFactory.getRuntimeMXBean().getStartTime();
@@ -47,6 +52,18 @@ public class Mc_server_endpoints_plugin extends JavaPlugin implements Listener {
 
     long lastUpdatedEpoch = Instant.now().getEpochSecond();
 
+    for (World world : Bukkit.getWorlds()) {
+      int count = world.getEntities().size();
+
+      entitiesTotal += count;
+
+      switch (world.getEnvironment()) {
+        case NORMAL -> entitiesOverworld += count;
+        case NETHER -> entitiesNether += count;
+        case THE_END -> entitiesEnd += count;
+      }
+    }
+
     currentSnapshot = new MetricsSnapshot(
             onlinePlayers,
             maxPlayers,
@@ -54,7 +71,11 @@ public class Mc_server_endpoints_plugin extends JavaPlugin implements Listener {
             startTimeMillis,
             minecraftVersion,
             serverVersion,
-            lastUpdatedEpoch
+            lastUpdatedEpoch,
+            entitiesTotal,
+            entitiesOverworld,
+            entitiesNether,
+            entitiesEnd
     );
 
 
