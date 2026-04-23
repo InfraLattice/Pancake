@@ -1,5 +1,7 @@
 package io.github.celinova.mc_server_endpoints_plugin;
 
+import java.util.Map;
+
 public class MetricsSnapshot {
     private final int onlinePlayers;
     private final int maxPlayers;
@@ -16,9 +18,10 @@ public class MetricsSnapshot {
     private final String minecraftVersion;
     private final String serverVersion;
     private final long lastUpdatedEpoch;
-    private double tps1m;
-    private double tps5m;
-    private double tps15m;
+    private final double tps1m;
+    private final double tps5m;
+    private final double tps15m;
+    private final Map<String, Integer> entitiesByType;
 
     public MetricsSnapshot(
             int onlinePlayers,
@@ -38,7 +41,8 @@ public class MetricsSnapshot {
             int loadedChunksEnd,
             double tps1m,
             double tps5m,
-            double tps15m
+            double tps15m,
+            Map<String, Integer> entitiesByType
     ) {
         this.onlinePlayers = onlinePlayers;
         this.maxPlayers = maxPlayers;
@@ -58,7 +62,7 @@ public class MetricsSnapshot {
         this.tps1m = tps1m;
         this.tps5m = tps5m;
         this.tps15m = tps15m;
-
+        this.entitiesByType = entitiesByType;
     }
 
 
@@ -132,5 +136,9 @@ public class MetricsSnapshot {
 
     public double getTps15m() {
         return tps15m;
+    }
+
+    public Map<String, Integer> getEntitiesByType() {
+        return entitiesByType;
     }
 }

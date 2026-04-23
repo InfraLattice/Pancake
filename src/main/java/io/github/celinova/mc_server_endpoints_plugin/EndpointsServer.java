@@ -4,6 +4,7 @@ import com.sun.net.httpserver.HttpServer;
 import java.net.InetSocketAddress;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 public class EndpointsServer {
 
@@ -46,6 +47,22 @@ public class EndpointsServer {
         server.createContext("/health", exchange -> {
             try {
                 if (!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
+                    sendMethodNotAllowed(exchange);
+                    return;
+                }
+
+                sendJson(exchange, 200, "{\"status\":\"ok\"}");
+
+            } catch (Exception e) {
+                sendInternalError(exchange);
+            }
+        });
+    }
+
+    private void registerDebugEndpoint() {
+        server.createContext("/debug", exchange -> {
+            try {
+                if (!exchange.getRequestMethod().equalsIgnoreCase("POST")) {
                     sendMethodNotAllowed(exchange);
                     return;
                 }
@@ -165,6 +182,17 @@ public class EndpointsServer {
                 sb.append("# HELP mc_tps_15m 15-minute average ticks per second\n");
                 sb.append("# TYPE mc_tps_15m gauge\n");
                 sb.append("mc_tps_15m ").append(snapshot.getTps15m()).append("\n");
+
+                sb.append("# HELP mc_entities_by_type Current number of loaded entities by type\n");
+                sb.append("# TYPE mc_entities_by_type gauge\n");
+
+                for (Map.Entry<String, Integer> entry : snapshot.getEntitiesByType().entrySet()) {
+                    sb.append("mc_entities_by_type{type=\"")
+                            .append(entry.getKey().toLowerCase())
+                            .append("\"} ")
+                            .append(entry.getValue())
+                            .append("\n");
+                }
 
                 String response = sb.toString();
                 sendPlainText(exchange, 200, response);

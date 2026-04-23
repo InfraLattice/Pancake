@@ -2,11 +2,14 @@ package io.github.celinova.mc_server_endpoints_plugin;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.management.ManagementFactory;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Mc_server_endpoints_plugin extends JavaPlugin implements Listener {
 
@@ -55,6 +58,19 @@ public class Mc_server_endpoints_plugin extends JavaPlugin implements Listener {
     String serverVersion = Bukkit.getVersion();
 
     long lastUpdatedEpoch = Instant.now().getEpochSecond();
+    Map<String, Integer> entitiesByType = new HashMap<>();
+
+    for (World world : Bukkit.getWorlds()) {
+      for (Entity entity : world.getEntities()) {
+
+        String type = entity.getType().name();
+
+        entitiesByType.put(
+                type,
+                entitiesByType.getOrDefault(type, 0) + 1
+        );
+      }
+    }
 
     for (World world : Bukkit.getWorlds()) {
       int count = world.getEntities().size();
@@ -104,7 +120,8 @@ public class Mc_server_endpoints_plugin extends JavaPlugin implements Listener {
             loadedChunksEnd,
             tps1m,
             tps5m,
-            tps15m
+            tps15m,
+            entitiesByType
     );
 
 
